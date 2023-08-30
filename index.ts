@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import routes from "./src/routes";
 import * as dotenv from 'dotenv'
 const cors = require('cors');
+const cron = require("node-cron");
+
 dotenv.config()
 const app = express();
 var allowedDomains = ['http://127.0.0.1:5500'];
@@ -12,6 +14,10 @@ const dbPass = process.env.DB_PASS;
 const uri = `mongodb+srv://${dbUser}:${dbPass}@cluster0.7yvwjei.mongodb.net/?retryWrites=true&w=majority`;
 mongoose.connect(uri)
 mongoose.Promise = global.Promise;
+
+cron.schedule('*/14 * * * *', () => {
+    console.log('mantendo o servidor vivo...', new Date());
+});
 
 app.use(express.json());
 app.use(cors())
