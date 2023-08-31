@@ -15,8 +15,13 @@ const uri = `mongodb+srv://${dbUser}:${dbPass}@cluster0.7yvwjei.mongodb.net/?ret
 mongoose.connect(uri)
 mongoose.Promise = global.Promise;
 
-cron.schedule('*/5 * * * * *', () => {
+cron.schedule('*/10 * * * *', () => {
     console.log('mantendo o servidor vivo...', new Date());
+
+    var exec = require('child_process').exec;
+    exec("ping -c 2 backend-facul-saude.onrender.com", function (err, stdout, stderr) {
+        console.log(stdout);
+    });
 });
 
 app.use(express.json());
