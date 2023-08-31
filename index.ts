@@ -15,7 +15,7 @@ const uri = `mongodb+srv://${dbUser}:${dbPass}@cluster0.7yvwjei.mongodb.net/?ret
 mongoose.connect(uri)
 mongoose.Promise = global.Promise;
 
-cron.schedule('*/14 * * * *', () => {
+cron.schedule('*/5 * * * * *', () => {
     console.log('mantendo o servidor vivo...', new Date());
 });
 
