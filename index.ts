@@ -4,6 +4,7 @@ import routes from "./src/routes";
 import * as dotenv from 'dotenv'
 const cors = require('cors');
 const cron = require("node-cron");
+const exec = require("child_process").exec;
 
 dotenv.config()
 const app = express();
@@ -15,14 +16,14 @@ const uri = `mongodb+srv://${dbUser}:${dbPass}@cluster0.7yvwjei.mongodb.net/?ret
 mongoose.connect(uri)
 mongoose.Promise = global.Promise;
 
-cron.schedule('*/10 * * * *', () => {
+cron.schedule('*/14 * * * *', () => {
     console.log('mantendo o servidor vivo...', new Date());
 
-    var exec = require('child_process').exec;
-    exec("ping -c 2 backend-facul-saude.onrender.com", function (err, stdout, stderr) {
+    exec(`ping -n 1 -w 1000 backend-facul-saude.onrender.com`, (err, stdout, stderr) => {
         console.log(stdout);
-    });
+    })
 });
+
 
 app.use(express.json());
 app.use(cors())
