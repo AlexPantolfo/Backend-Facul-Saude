@@ -25,7 +25,7 @@ routes.get("/", (req: Request, res: Response) => {
 });
 
 routes.get("/auth", (req: Request, res: Response) => {
-    const token = req.headers['Authorization'];
+    const token = req.headers['authorization'];
 
     if (!token) return res.status(401).json({ msg: "Acesso negado!" }).end();
 
