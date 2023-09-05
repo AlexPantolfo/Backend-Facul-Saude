@@ -42,5 +42,6 @@ routes.get("/auth", (req: Request, res: Response) => {
 
 routes.post('/addUser', userController.addUser)
 routes.post('/login', userController.login)
+routes.post('/loginAdmin', userController.loginAdmin)
 
 export default routes;
