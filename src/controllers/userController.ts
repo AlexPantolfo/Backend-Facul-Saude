@@ -1,13 +1,21 @@
-import { Request, Response } from 'express'
+import { Request, Response, Router } from 'express'
+import express from 'express'
 import User from '../schemas/user'
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import * as dotenv from 'dotenv'
 dotenv.config()
-class UserController {
+export default class UserController {
 
-    async addUser(req: Request, res: Response) {
-        {
+    public router: Router;
+
+    constructor() {
+        this.router = express.Router();
+        this.registerRoutes();
+    }
+
+    protected registerRoutes(): void {
+        this.router.post('/addUser', async (req: Request, res: Response) => {
             try {
                 const user = await User.create(req.body);
                 user.password = undefined;
@@ -16,11 +24,25 @@ class UserController {
             } catch (err) {
                 return res.status(400).send({ error: err }).end();
             }
-        }
-    }
+        });
 
-    async login(req: Request, res: Response) {
-        {
+        this.router.post('/auth', async (req: Request, res: Response) => {
+            const token = req.headers['authorization'];
+
+            if (!token) return res.status(401).json({ msg: "Acesso negado!" }).end();
+
+            try {
+                const secret = process.env.SECRET;
+
+                jwt.verify(token, secret);
+                res.status(200).json({ msg: "O Token é valido!" }).end();
+
+            } catch (err) {
+                res.status(400).json({ msg: "O Token é inválido!" }).end();
+            }
+        });
+
+        this.router.post('/login', async (req: Request, res: Response) => {
             const { email, password } = req.body;
             const secret = process.env.SECRET;
 
@@ -49,12 +71,9 @@ class UserController {
             } catch (error) {
                 res.status(500).json({ msg: error }).end();
             }
-        }
-    }
+        });
 
-
-    async loginAdmin(req: Request, res: Response) {
-        {
+        this.router.post('/loginAdmin', async (req: Request, res: Response) => {
             const { email, password } = req.body;
             const secret = process.env.SECRET;
 
@@ -83,8 +102,6 @@ class UserController {
             } catch (error) {
                 res.status(500).json({ msg: error }).end();
             }
-        }
+        });
     }
 }
-
-export default new UserController;

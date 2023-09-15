@@ -1,47 +1,20 @@
-import Router from 'express'
+import express from 'express'
 import { Request, Response } from 'express'
-import userController from './controllers/userController';
-import jwt from "jsonwebtoken";
-const routes = Router();
+import UserController from './controllers/userController';
+import MedicosController from './controllers/medicosController';
 
-function checkToken(req, res, next) {
-    const token = req.headers['authorization'];
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
-    if (!token) return res.status(401).json({ msg: "Acesso negado!" }).end();
+const routes = (server: express.Application): void => {
+    server._router.get("/", (req: Request, res: Response) => {
+        res.json({ message: "Hello world!" });
+    });
 
-    try {
-        const secret = process.env.SECRET;
+    server.use('/user', new UserController().router);
+    server.use('/medicos', new MedicosController().router);
+    server.use('/api-docs', swaggerUi.serve);
+    server.get('/api-docs', swaggerUi.setup(swaggerDocument));
+};
 
-        jwt.verify(token, secret);
-
-        next();
-    } catch (err) {
-        res.status(400).json({ msg: "O Token é inválido!" }).end();
-    }
-}
-
-routes.get("/", (req: Request, res: Response) => {
-    res.json({ message: "Hello world!" });
-});
-
-routes.get("/auth", (req: Request, res: Response) => {
-    const token = req.headers['authorization'];
-
-    if (!token) return res.status(401).json({ msg: "Acesso negado!" }).end();
-
-    try {
-        const secret = process.env.SECRET;
-
-        jwt.verify(token, secret);
-        res.status(200).json({ msg: "O Token é valido!" }).end();
-
-    } catch (err) {
-        res.status(400).json({ msg: "O Token é inválido!" }).end();
-    }
-});
-
-routes.post('/addUser', userController.addUser)
-routes.post('/login', userController.login)
-routes.post('/loginAdmin', userController.loginAdmin)
-
-export default routes;
+export default routes

@@ -5,32 +5,48 @@ import * as dotenv from 'dotenv'
 const cors = require('cors');
 
 dotenv.config()
-const app = express();
-var allowedDomains = ['http://127.0.0.1:5500'];
-const dbUser = process.env.DB_USER;
-const dbPass = process.env.DB_PASS;
 
-const uri = `mongodb+srv://${dbUser}:${dbPass}@cluster0.7yvwjei.mongodb.net/?retryWrites=true&w=majority`;
-mongoose.connect(uri)
-mongoose.Promise = global.Promise;
+class Server {
+    public app: express.Application;
+    private dbUser = process.env.DB_USER;
+    private dbPass = process.env.DB_PASS;
 
-app.use(express.json());
-app.use(cors())
-// app.use(cors({
-//     origin: function (origin, callback) {
-//         if (!origin) return callback(null, true);
+    constructor() {
+        this.app = express();
+        this.config();
+    }
 
-//         if (allowedDomains.indexOf(origin) === -1) {
-//             var msg = `This site ${origin} does not have an access. Only specific domains are allowed to access it.`;
-//             return callback(new Error(msg), false);
-//         }
-//         return callback(null, true);
-//     }, credentials: true
-// }))
+    public config(): void {
+        this.app.set('port', 3000);
+        this.app.use(express.json());
+        routes(this.app);
+    }
 
-app.set("port", process.env.PORT || 3000);
-app.use(routes);
+    public async start(): Promise<void> {
+        const connectionString = `mongodb+srv://${this.dbUser}:${this.dbPass}@cluster0.7yvwjei.mongodb.net/?retryWrites=true&w=majority`;
+        mongoose.set("strictQuery", false);
+        mongoose.connect(connectionString)
+        mongoose.Promise = global.Promise;
 
-app.listen(app.get("port"), () => {
-    console.log(`Server on http://localhost:${app.get("port")}/`);
-});
+        const allowedDomains = ['http://127.0.0.1:5500'];
+        this.app.use(cors())
+        // app.use(cors({
+        //     origin: function (origin, callback) {
+        //         if (!origin) return callback(null, true);
+
+        //         if (allowedDomains.indexOf(origin) === -1) {
+        //             var msg = `This site ${origin} does not have an access. Only specific domains are allowed to access it.`;
+        //             return callback(new Error(msg), false);
+        //         }
+        //         return callback(null, true);
+        //     }, credentials: true
+        // }))
+
+        this.app.listen(this.app.get('port'), () => {
+            console.log('Server listening in port 3000');
+        });
+    }
+}
+
+const server = new Server();
+server.start();

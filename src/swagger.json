@@ -1,0 +1,267 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API Saúde+",
+    "description": "API para informações e operações dos médicos disponíveis da clínica Saúde+"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Medicos",
+      "description": "Endpoints"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/medicos/medicos-disponiveis": {
+      "get": {
+        "tags": ["Medicos"],
+        "description": "Traz todos os médicos na base",
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/medicos/medico-especialidade-{especialidade}": {
+      "get": {
+        "tags": ["Medicos"],
+        "description": "Traz os médicos da especialidade especificada",
+        "parameters": [
+          {
+            "name": "especialidade",
+            "in": "path",
+            "description": "Especialidade",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/medicos/medico-id-{id}": {
+      "get": {
+        "tags": [
+          "Medicos"
+        ],
+        "description": "Traz o médico com o ID especificado",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do médico",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/medicos/novo-medico": {
+      "post": {
+        "tags": [
+          "Medicos"
+        ],
+        "description": "Adiciona novo médico com os parâmetros",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "nome",
+            "in": "body",
+            "description": "Nome do médico",
+            "required": true,
+            "schema": {
+            }
+          },
+          {
+            "name": "especialidade",
+            "in": "body",
+            "description": "Especialidade do médico",
+            "required": true,
+            "schema": {
+            }
+          },
+          {
+            "name": "CRM",
+            "in": "body",
+            "description": "CRM do médico",
+            "required": true,
+            "schema": {
+            }
+          },
+          {
+            "name": "email",
+            "in": "body",
+            "description": "Email do médico",
+            "required": true,
+            "schema": {
+            }
+          },
+          {
+            "name": "foto",
+            "in": "body",
+            "description": "Foto do médico",
+            "required": true,
+            "schema": {
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/medicos/atualiza-medico-id-{id}": {
+      "post": {
+        "tags": ["Medicos"],
+        "description": "Atualiza informações do medico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do médico",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "nome",
+            "in": "body",
+            "description": "Nome do médico",
+            "required": false,
+            "schema": {
+            }
+          },
+          {
+            "name": "especialidade",
+            "in": "body",
+            "description": "Especialidade do médico",
+            "required": false,
+            "schema": {
+            }
+          },
+          {
+            "name": "CRM",
+            "in": "body",
+            "description": "CRM do médico",
+            "required": false,
+            "schema": {
+            }
+          },
+          {
+            "name": "email",
+            "in": "body",
+            "description": "Email do médico",
+            "required": false,
+            "schema": {
+            }
+          },
+          {
+            "name": "foto",
+            "in": "body",
+            "description": "Foto do médico",
+            "required": false,
+            "schema": {
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found."
+          },
+          "500": {
+            "description": "Server Failure."
+          }
+        }
+      }
+    },
+    "/medicos/exclui-medico-id-{id}": {
+      "delete": {
+        "tags": ["Medicos"],
+        "description": "Exclui médico da base",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Medicos": {
+      "type": "object",
+      "properties": {
+        "nome": {
+          "type": "string",
+          "example": "Cristiano Alves de Lima"
+        },
+        "especialidade": {
+          "type": "string",
+          "example": "Ortopedia"
+        },
+        "CRM": {
+          "type": "number",
+          "example": "615338",
+          "description": "Deve ser um número de 6 digitos, primeiro digitos diferente de 0"
+        },
+        "email": {
+          "type": "string",
+          "example": "cristianoal@gmail.com"
+        },
+        "foto": {
+          "type": "string",
+          "example": "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",
+          "description": "Imagem de até 100kb encodada em base64"
+        }
+      },
+      "xml": {
+        "name": "Medicos"
+      }
+    }
+  }
+}
