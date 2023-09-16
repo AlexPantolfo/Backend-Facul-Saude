@@ -5,12 +5,16 @@
     "title": "API Saúde+",
     "description": "API para informações e operações dos médicos disponíveis da clínica Saúde+"
   },
-  "host": "localhost:3000",
+  "host": "backend-facul-saude.onrender.com",
   "basePath": "/",
   "tags": [
     {
       "name": "Medicos",
-      "description": "Endpoints"
+      "description": "Endpoints relacionados as funcionalidades dos médicos"
+    },
+    {
+      "name": "User",
+      "description": "Endpoints relacionados as funcionalidades de usuários"
     }
   ],
   "consumes": [
@@ -230,6 +234,43 @@
           }
         }
       }
+    },
+    "/user/addUser": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Adiciona novo usuario",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "nome",
+            "in": "body",
+            "description": "Nome do médico",
+            "required": true,
+            "schema": {
+            }
+          },
+          {
+            "name": "foto",
+            "in": "body",
+            "description": "Foto do médico",
+            "required": true,
+            "schema": {
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -261,6 +302,22 @@
       },
       "xml": {
         "name": "Medicos"
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "usuariodaaplicacao@email.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "v2#3A!Byac23"
+        }
+      },
+      "xml": {
+        "name": "User"
       }
     }
   }

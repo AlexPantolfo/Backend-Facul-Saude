@@ -7,7 +7,7 @@ export default class MedicosDTO {
     ID: medico._id,
     nome: medico.nome,
     especialidade: medico.especialidade,
-    crm: medico.crm,
+    CRM: medico.CRM,
     email: medico.email,
     foto: medico.foto,
   });
@@ -42,7 +42,7 @@ export default class MedicosDTO {
     ID: medico._id,
     nome: medico.nome,
     especialidade: medico.especialidade,
-    crm: medico.crm,
+    CRM: medico.CRM,
     email: medico.email,
     foto: medico.foto,
   });
