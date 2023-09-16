@@ -29,7 +29,7 @@ const MedicosSchema = new mongoose.Schema(
 		foto:
 		{
 			type: String,
-			required: [true, "Nome é obrigatório"],
+			required: [true, "Foto é obrigatória"],
 		},
 		isDeleted:
 		{
