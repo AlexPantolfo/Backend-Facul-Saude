@@ -4,6 +4,8 @@ import User from '../schemas/user'
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import * as dotenv from 'dotenv'
+import { NotFoundError } from '../lib/errors';
+import { validateObjectId } from '../middlewares/validation';
 dotenv.config()
 export default class UserController {
 
@@ -103,5 +105,48 @@ export default class UserController {
                 res.status(500).json({ msg: error }).end();
             }
         });
+        this.router.get('/userAll', async (req, res, next) => {
+            try {
+                /* const {  page = 1, limit = 10 } = req.query; */
+                const [user] = await Promise.all([
+                    User.find(),
+                   
+                ]);
+                res.json(
+                    this.userDTO.getUserResponseDTO(user)
+                );
+            } catch (error) {
+                next(error);
+            }
+        });
+        this.router.get('/user-id-:id', validateObjectId, async (req, res, next) => {
+            try {
+                const id = req.params.id;
+                const user = await User.findOne({ _id: id });
+                if (!user) {
+                    throw new NotFoundError('ID nao encontrado');
+                }
+                res.json(
+                    this.UserDTO.getUserByIdResponseDTO(user)
+                );
+            } catch (err) {
+                next(err);
+            }
+        });
+        this.router.delete('/exclui-user-id-:id', validateObjectId, async (req, res, next) => {
+            try {
+                const deleted = await User.findOneAndUpdate(
+                    { _id: req.params.id}
+                );
+                if (!deleted) {
+                    throw new NotFoundError('Usuário não encontrado');
+                }
+                res.json(this.userDTO.getDeleteUserResponseDTO(deleted));
+            } catch (error) {
+                next(error);
+            }
+        });
+    
+
     }
 }
