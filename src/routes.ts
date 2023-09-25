@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express'
 import UserController from './controllers/userController';
 import MedicosController from './controllers/medicosController';
 import errorHandler from './lib/error.handler';
+import AgendaController from './controllers/agendaController';
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
@@ -13,6 +14,7 @@ const routes = (server: express.Application): void => {
 
     server.use('/user', new UserController().router);
     server.use('/medicos', new MedicosController().router);
+    server.use('/agenda', new AgendaController().router);
     server.use('/api-docs', swaggerUi.serve);
     server.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
