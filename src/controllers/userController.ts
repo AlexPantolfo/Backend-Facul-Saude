@@ -136,6 +136,11 @@ export default class UserController {
             try {
                 const deleted = await User.findOneAndUpdate(
                     { _id: req.params.id}
+                    /* TODO - Isso está errado, essa é a logica de atualizar um campo
+                              a partir do id, não excluir. Como usuário não tem o parâmetro
+                              isDeleted, essa função não faz nada, e o retorno do endpoint é o seguinte:
+                              "Plan executor error during findAndModify :: caused by :: Performing an update on the path '_id' would modify the immutable field '_id'"
+						*/
                 );
                 if (!deleted) {
                     throw new NotFoundError('Usuário não encontrado');
