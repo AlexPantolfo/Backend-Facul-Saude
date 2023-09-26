@@ -9,8 +9,6 @@ export default class UserDTO {
     email: user.email,
     dataNascimento: user.dataNascimento,
     dependentes: user.dependentes,
-    /* TODO - Validar se o array de dependentes retorna corretamente dessa forma
-              caso o usuario possua mais de um dependente */
   });
 
   public getUserResponseDTO = (user, count) => ({
@@ -42,10 +40,8 @@ export default class UserDTO {
     message: 'Usuário atualizado com sucesso',
     ID: user._id,
     nome: user.nome,
-    dependentes: user.dependentes,
     email: user.email,
     dataNascimento: user.dataNascimento,
-    /* TODO - Validar se o array de dependentes retorna corretamente dessa forma
-              caso o usuario possua mais de um dependente */
+    dependentes: user.dependentes,
   });
 }

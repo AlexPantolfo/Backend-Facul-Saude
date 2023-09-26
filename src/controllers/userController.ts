@@ -6,12 +6,15 @@ import jwt from "jsonwebtoken";
 import * as dotenv from 'dotenv'
 import { NotFoundError } from '../lib/errors';
 import { validateObjectId } from '../middlewares/validation';
+import UserDTO from '../dto/user.dto';
 dotenv.config()
 export default class UserController {
 
     public router: Router;
 
-    constructor() {
+    constructor(
+        private userDTO: UserDTO = new UserDTO()
+    ) {
         this.router = express.Router();
         this.registerRoutes();
     }
@@ -126,7 +129,7 @@ export default class UserController {
                     throw new NotFoundError('ID nao encontrado');
                 }
                 res.json(
-                    this.UserDTO.getUserByIdResponseDTO(user)
+                    this.userDTO.getUserByIdResponseDTO(user)
                 );
             } catch (err) {
                 next(err);
@@ -134,26 +137,35 @@ export default class UserController {
         });
         this.router.delete('/exclui-user-id-:id', validateObjectId, async (req, res, next) => {
             try {
-                const deleted = await User.findOneAndUpdate(
-                    { _id: req.params.id}
-                    /* TODO - Isso está errado, essa é a logica de atualizar um campo
-                              a partir do id, não excluir. Como usuário não tem o parâmetro
-                              isDeleted, essa função não faz nada, e o retorno do endpoint é o seguinte:
-                              "Plan executor error during findAndModify :: caused by :: Performing an update on the path '_id' would modify the immutable field '_id'"
-						*/
-                );
-                if (!deleted) {
-                    throw new NotFoundError('Usuário não encontrado');
-                }
+                const deleted = await User.findByIdAndDelete({ _id: req.params.id });
+
                 res.json(this.userDTO.getDeleteUserResponseDTO(deleted));
             } catch (error) {
                 next(error);
             }
         });
-    /* TODO - Update User (atenção em como vai ficar a request para casos com mais de 1 dependente)
-              Add dependente
-				  Favor fazer pelo menos uma chamada de cada endpoint para validar se está funcionando
-				  backend-facul-saude.onrender.com/user/Endpoint
-	 */
+
+        this.router.post('/atualiza-user-id-:id', validateObjectId, async (req, res, next) => {
+            try {
+                const toUpdate: any = {};
+                const { nome, dataNascimento, dependentes } = req.body;
+                if (nome) toUpdate.nome = nome;
+                if (dataNascimento) toUpdate.dataNascimento = dataNascimento;
+                if (!!dependentes && dependentes.length) toUpdate.dependentes = dependentes;
+                const updated = await User.findOneAndUpdate(
+                    { _id: req.params.id },
+                    toUpdate,
+                    { new: true }
+                );
+                if (!updated) {
+                    throw new NotFoundError('Usuário não atualizado, verifique os parametros enviados');
+                }
+                res.json(this.userDTO.getUpdateUserResponseDTO(updated));
+
+            } catch (error) {
+                next(error);
+            }
+        });
+
     }
 }
