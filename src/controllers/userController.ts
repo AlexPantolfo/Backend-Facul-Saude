@@ -107,13 +107,12 @@ export default class UserController {
         });
         this.router.get('/userAll', async (req, res, next) => {
             try {
-                /* const {  page = 1, limit = 10 } = req.query; */
-                const [user] = await Promise.all([
+                const [user, count] = await Promise.all([
                     User.find(),
-                   
+                    User.count(),
                 ]);
                 res.json(
-                    this.userDTO.getUserResponseDTO(user)
+                    this.userDTO.getUserResponseDTO(user, count)
                 );
             } catch (error) {
                 next(error);
@@ -146,7 +145,10 @@ export default class UserController {
                 next(error);
             }
         });
-    
-
+    /* TODO - Update User (atenção em como vai ficar a request para casos com mais de 1 dependente)
+              Add dependente
+				  Favor fazer pelo menos uma chamada de cada endpoint para validar se está funcionando
+				  backend-facul-saude.onrender.com/user/Endpoint
+	 */
     }
 }

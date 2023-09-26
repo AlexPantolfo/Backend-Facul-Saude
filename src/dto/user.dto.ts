@@ -7,12 +7,15 @@ export default class UserDTO {
     ID: user._id,
     nome: user.nome,
     email: user.email,
-    dependentes: user.dependentes,
     dataNascimento: user.dataNascimento,
+    dependentes: user.dependentes,
+    /* TODO - Validar se o array de dependentes retorna corretamente dessa forma
+              caso o usuario possua mais de um dependente */
   });
 
-  public getUserResponseDTO = (user) => ({
+  public getUserResponseDTO = (user, count) => ({
     Dados: user.map(this.getUserDTO),
+    Quantidade: count,
   });
 
   public getUserByIdResponseDTO = (user) => ({
@@ -42,5 +45,7 @@ export default class UserDTO {
     dependentes: user.dependentes,
     email: user.email,
     dataNascimento: user.dataNascimento,
+    /* TODO - Validar se o array de dependentes retorna corretamente dessa forma
+              caso o usuario possua mais de um dependente */
   });
 }
