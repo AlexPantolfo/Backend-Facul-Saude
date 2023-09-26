@@ -248,26 +248,192 @@
           {
             "name": "nome",
             "in": "body",
-            "description": "Nome do médico",
+            "description": "Nome do usuário",
             "required": true,
             "schema": {
             }
           },
           {
-            "name": "foto",
+            "name": "email",
             "in": "body",
-            "description": "Foto do médico",
+            "description": "Email do usuário",
+            "required": true,
+            "schema": {
+            }
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "Senha do usuário",
             "required": true,
             "schema": {
             }
           }
         ],
         "responses": {
-          "201": {
+          "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Campo Obrigatório ausente"
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Realiza login e gera token",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "body",
+            "description": "Email do usuário",
+            "required": true,
+            "schema": {
+            }
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "Senha do usuário",
+            "required": true,
+            "schema": {
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "422": {
+            "description": "Campo Obrigatório ausente ou inválido"
+          }
+        }
+      }
+    },
+    "/user/loginAdmin": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Realiza login  em perfil admin e gera token",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "body",
+            "description": "Email do usuário admin",
+            "required": true,
+            "schema": {
+            }
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "Senha do usuário admin",
+            "required": true,
+            "schema": {
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "422": {
+            "description": "Campo Obrigatório ausente ou inválido"
+          }
+        }
+      }
+    },
+    "/user/auth": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Autentica token adquirido através do login",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT access token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Token Inválido"
+          }
+        },
+        "security": [
+          { "bearerAuth": [] }
+        ]
+      }
+    },
+    "/user/user-id-{id}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Traz o usuário com o ID especificado",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/user/exclui-user-id-{id}": {
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "description": "Exclui o usuário com o ID especificado",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal error"
           }
         }
       }
@@ -307,6 +473,10 @@
     "User": {
       "type": "object",
       "properties": {
+        "nome": {
+          "type": "string",
+          "example": "Usuário cliente da Silva"
+        },
         "email": {
           "type": "string",
           "example": "usuariodaaplicacao@email.com"
@@ -314,10 +484,43 @@
         "password": {
           "type": "string",
           "example": "v2#3A!Byac23"
+        },
+        "dataNascimento": {
+          "type": "string",
+          "example": "1993-06-11",
+          "description": "Formato da data: YYYY-MM-DD"
+        },
+        "dependentes": {
+          "type": "array",
+          "example": "CONSERTAR QUANDO TERMINAR OS DEPENDENTES",
+          "description": "NAO ESQUECER DE CONSERTAR"
         }
       },
       "xml": {
         "name": "User"
+      }
+    },
+    "Agenda": {
+      "type": "object",
+      "properties": {
+        "medicoId": {
+          "type": "string",
+          "example": "650ef71d68635c83101b3601",
+          "description": "ID do médico responsável pela consulta"
+        },
+        "pacienteId": {
+          "type": "string",
+          "example": "6504b2bb5cc3fae1728e10e6",
+          "description": "ID do usuário que será cliente"
+        },
+        "dataConsulta": {
+          "type": "string",
+          "example": "2023-06-11",
+          "description": "Formato da data: YYYY-MM-DD"
+        }
+      },
+      "xml": {
+        "name": "Agenda"
       }
     }
   }
