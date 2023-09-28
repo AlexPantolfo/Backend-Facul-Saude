@@ -13,15 +13,19 @@ ${ambiente}
 
 *** Test Cases ***
 
+############ MÉDICOS ################
+
 GET medicos disponiveis status:200
 	[Tags]   Medico   Sucesso    /medicos-disponiveis
 	GET    ${url_${ambiente}}/medicos/medicos-disponiveis    timeout=20
+	Output Schema     response body
 	Integer    response status    200
 	Integer    response body Quantidade
 
 POST medicos disponiveis status:404
 	[Tags]   Medico   Falha    /medicos-disponiveis
 	POST    ${url_${ambiente}}/medicos/medicos-disponiveis    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
@@ -29,60 +33,70 @@ POST medicos disponiveis status:404
 PUT medicos disponiveis status:404
 	[Tags]   Medico   Falha    /medicos-disponiveis
 	PUT    ${url_${ambiente}}/medicos/medicos-disponiveis    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PATCH medicos disponiveis status:404
 	[Tags]   Medico   Falha    /medicos-disponiveis
 	PATCH    ${url_${ambiente}}/medicos/medicos-disponiveis    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 DELETE medicos disponiveis status:404
 	[Tags]   Medico   Falha    /medicos-disponiveis
 	DELETE    ${url_${ambiente}}/medicos/medicos-disponiveis    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 GET medico id status:200
 	[Tags]   Medico   Sucesso    /medico-id
 	GET    ${url_${ambiente}}/medicos/medico-id-${id_valido_${ambiente}}    timeout=20
+	Output Schema     response body
 	Integer    response status    200
 	Expect Response Body    {"Dados": {"ID": "6504b2bb5cc3fae1728e10e6","nome": "Medico teste","especialidade": "especialidade teste","email": "teste@2gmail.com","foto": "foto teste"}}
 
 GET medico id invalido status:404
 	[Tags]   Medico   Falha    /medico-id
 	GET    ${url_${ambiente}}/medicos/medico-id-123123123123    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String    response body message  ID nao encontrado
 
 POST medico id status:404
 	[Tags]   Medico   Falha    /medico-id
 	POST    ${url_${ambiente}}/medicos/medico-id-${id_valido_${ambiente}}    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PUT medico id status:404
 	[Tags]   Medico   Falha    /medico-id
 	PUT    ${url_${ambiente}}/medicos/medico-id-${id_valido_${ambiente}}    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PATCH medico id status:404
 	[Tags]   Medico   Falha    /medico-id
 	PATCH    ${url_${ambiente}}/medicos/medico-id-${id_valido_${ambiente}}    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 DELETE medico id status:404
 	[Tags]   Medico   Falha    /medico-id
 	DELETE    ${url_${ambiente}}/medicos/medico-id-${id_valido_${ambiente}}    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 GET medico especialidade status:200
 	[Tags]   Medico   Sucesso    /medico-especialidade
 	GET    ${url_${ambiente}}/medicos/medico-especialidade-Ortopedia    timeout=20
+	Output Schema     response body
 	Integer    response status    200
 	Array    response body Dados
 	String    $..especialidade    Ortopedia
@@ -90,30 +104,35 @@ GET medico especialidade status:200
 GET medico especialidade invalida status:200
 	[Tags]   Medico   Sucesso    /medico-especialidade
 	GET    ${url_${ambiente}}/medicos/medico-especialidade-especialidadeinvalida    timeout=20
+	Output Schema     response body
 	Integer    response status    200
 	Expect Response Body    {"Dados": []}
 
 POST medico especialidade status:404
 	[Tags]   Medico   Falha    /medico-especialidade
 	POST    ${url_${ambiente}}/medicos/medico-especialidade-Ortopedia    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PUT medico especialidade status:404
 	[Tags]   Medico   Falha    /medico-especialidade
 	PUT    ${url_${ambiente}}/medicos/medico-especialidade-Ortopedia    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PATCH medico especialidade status:404
 	[Tags]   Medico   Falha    /medico-especialidade
 	PATCH    ${url_${ambiente}}/medicos/medico-especialidade-Ortopedia    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 DELETE medico especialidade status:404
 	[Tags]    Medico   Falha    /medico-especialidade
 	DELETE    ${url_${ambiente}}/medicos/medico-especialidade-Ortopedia    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
@@ -123,6 +142,7 @@ POST novo medico status:200
 	${json}  Load JSON from file    ${EXECDIR}/test/resources/medico.json
 	Update value to JSON    ${json}    CRM    ${crm}
 	POST    ${url_${ambiente}}/medicos/novo-medico    ${json}    timeout=20
+	Output Schema     response body
 	Integer    response status    200
 	String    response body message     Médico criado com sucesso
 	${id_medico_criado}  Output      response body ID
@@ -134,6 +154,7 @@ POST novo medico CRM duplicado status:500
 	${json}  Load JSON from file    ${EXECDIR}/test/resources/medico.json
 	Update value to JSON    ${json}    CRM    222222
 	POST    ${url_${ambiente}}/medicos/novo-medico    ${json}    timeout=20
+	Output Schema     response body
 	Integer    response status    500
 	String    response body message     E11000 duplicate key error collection: test.medicos index: CRM_1 dup key: { CRM: 222222 }
 
@@ -143,6 +164,7 @@ POST novo medico nome vazio status:500
 	${json}  Load JSON from file    ${EXECDIR}/test/resources/medico.json
 	Update value to JSON    ${json}    nome    ${EMPTY}
 	POST    ${url_${ambiente}}/medicos/novo-medico    ${json}    timeout=20
+	Output Schema     response body
 	Integer    response status    500
 	String    response body message     Medicos validation failed: nome: Nome é obrigatório
 
@@ -152,6 +174,7 @@ POST novo medico especialidade vazia status:500
 	${json}  Load JSON from file    ${EXECDIR}/test/resources/medico.json
 	Update value to JSON    ${json}    especialidade    ${EMPTY}
 	POST    ${url_${ambiente}}/medicos/novo-medico    ${json}    timeout=20
+	Output Schema     response body
 	Integer    response status    500
 	String    response body message     Medicos validation failed: especialidade: Especialidade é obrigatória
 
@@ -161,6 +184,7 @@ POST novo medico email vazio status:500
 	${json}  Load JSON from file    ${EXECDIR}/test/resources/medico.json
 	Update value to JSON    ${json}    email    ${EMPTY}
 	POST    ${url_${ambiente}}/medicos/novo-medico    ${json}    timeout=20
+	Output Schema     response body
 	Integer    response status    500
 	String    response body message     Medicos validation failed: email: Email é obrigatório
 
@@ -170,36 +194,42 @@ POST novo medico foto vazio status:500
 	${json}  Load JSON from file    ${EXECDIR}/test/resources/medico.json
 	Update value to JSON    ${json}    foto    ${EMPTY}
 	POST    ${url_${ambiente}}/medicos/novo-medico    ${json}    timeout=20
+	Output Schema     response body
 	Integer    response status    500
 	String    response body message     Medicos validation failed: foto: Foto é obrigatória
 
 GET novo medico status:404
 	[Tags]   Medico   Falha    /novo-medico
 	GET    ${url_${ambiente}}/medicos/novo-medico    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PUT novo medico status:404
 	[Tags]   Medico   Falha    /novo-medico
 	PUT    ${url_${ambiente}}/medicos/novo-medico    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PATCH novo medico status:404
 	[Tags]   Medico   Falha    /novo-medico
 	PATCH    ${url_${ambiente}}/medicos/novo-medico    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 DELETE novo medico status:404
 	[Tags]    Medico   Falha   /novo-medico
 	DELETE    ${url_${ambiente}}/medicos/novo-medico    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 POST atualiza medico id status:200
 	[Tags]   Medico   Sucesso    /atualiza-medico-id
 	POST    ${url_${ambiente}}/medicos/atualiza-medico-id-${id_medico_criado}    {"nome": "Medice teste editado", "especialidade": "Cardiologia"}    timeout=20
+	Output Schema     response body
 	Integer    response status    200
 	String    response body message     Médico atualizado com sucesso
 	String    response body ID    ${id_medico_criado}
@@ -209,36 +239,42 @@ POST atualiza medico id status:200
 POST atualiza medico id ID invalido status:400
 	[Tags]   Medico   Falha    /atualiza-medico-id
 	POST    ${url_${ambiente}}/medicos/atualiza-medico-id-123123    {"nome": "Medice teste editado", "especialidade": "Cardiologia"}    timeout=20
+	Output Schema     response body
 	Integer    response status    400
 	String    response body message  ID invalido
 
 GET atualiza medico id status:404
 	[Tags]   Medico   Falha    /atualiza-medico-id
 	GET    ${url_${ambiente}}/medicos/atualiza-medico-id-123123    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PUT atualiza medico id status:404
 	[Tags]   Medico   Falha    /atualiza-medico-id
 	PUT    ${url_${ambiente}}/medicos/atualiza-medico-id-123123    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PATCH atualiza medico id status:404
 	[Tags]   Medico   Falha    /atualiza-medico-id
 	PATCH    ${url_${ambiente}}/medicos/atualiza-medico-id-123123    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 DELETE atualiza medico id status:404
 	[Tags]    Medico   Falha  /atualiza-medico-id
 	DELETE    ${url_${ambiente}}/medicos/atualiza-medico-id-123123    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 DELETE exclui medico id status:200
 	[Tags]   Medico   Sucesso    /exclui-medico-id
 	DELETE    ${url_${ambiente}}/medicos/exclui-medico-id-${id_medico_criado}    timeout=20
+	Output Schema     response body
 	Integer    response status    200
 	String     response body message  Médico excluído com sucesso
 	String     response body nome    Medice teste editado
@@ -247,32 +283,39 @@ DELETE exclui medico id status:200
 DELETE exclui medico id invalido status:404
 	[Tags]   Medico   Falha    /exclui-medico-id
 	DELETE    ${url_${ambiente}}/medicos/exclui-medico-id-123123    timeout=20
+	Output Schema     response body
 	Integer    response status    400
 	String    response body message  ID invalido
 
 GET exclui medico id status:404
 	[Tags]   Medico   Falha    /exclui-medico-id
 	GET    ${url_${ambiente}}/medicos/exclui-medico-id-123123    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 POST exclui medico id status:404
 	[Tags]   Medico   Falha    /exclui-medico-id
 	POST    ${url_${ambiente}}/medicos/exclui-medico-id-123123    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PUT exclui medico id status:404
 	[Tags]   Medico   Falha    /exclui-medico-id
 	PUT    ${url_${ambiente}}/medicos/exclui-medico-id-123123    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PATCH exclui medico id status:404
 	[Tags]   Medico   Falha    /exclui-medico-id
 	PATCH    ${url_${ambiente}}/medicos/exclui-medico-id-123123    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
+
+############ USER ################
 
 POST add User status:200
 	[Tags]   User     Sucesso     /addUser
@@ -280,6 +323,7 @@ POST add User status:200
 	${json}  Load JSON from file    ${EXECDIR}/test/resources/user.json
 	Update value to JSON    ${json}    email    ${email}
 	POST    ${url_${ambiente}}/user/addUser   ${json}     timeout=20
+	Output Schema     response body
 	Integer    response status    200
 	String    response body user email   ${email}
 	${id_user_criado}  Output      response body user _id
@@ -287,34 +331,38 @@ POST add User status:200
 
 POST add User nome vazio status:400
 	[Tags]   User     Falha     /addUser
-	Gera Email aleatorio
 	${json}  Load JSON from file    ${EXECDIR}/test/resources/user.json
 	Update value to JSON    ${json}    nome    ${EMPTY}
 	POST    ${url_${ambiente}}/user/addUser   ${json}     timeout=20
+	Output Schema     response body
 	Integer    response status    400
 	String    response body error errors nome message   Nome é obrigatório
 
 GET add User status:404
 	[Tags]   User   Falha    /addUser
 	GET    ${url_${ambiente}}/user/addUser   {"email": "teste123", "password": "lalala"}    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PUT add User status:404
 	[Tags]   User   Falha    /addUser
 	PUT    ${url_${ambiente}}/user/addUser   {"email": "teste123", "password": "lalala"}    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PATCH add User status:404
 	[Tags]   User   Falha    /addUser
 	PATCH    ${url_${ambiente}}/user/addUser   {"email": "teste123", "password": "lalala"}   timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 DELETE add User status:404
 	[Tags]    User   Falha  /addUser
 	DELETE    ${url_${ambiente}}/user/addUser   {"email": "teste123", "password": "lalala"}    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
@@ -323,6 +371,7 @@ POST login status:200
 	${json}  Load JSON from file    ${EXECDIR}/test/resources/user.json
 	Update value to JSON    ${json}    email    ${email}
 	POST    ${url_${ambiente}}/user/login   ${json}     timeout=20
+	Output Schema     response body
 	Integer    response status    200
 	String    response body msg   Autenticação realizada com sucesso!
 	${token_usr}   Output   response body token
@@ -330,40 +379,46 @@ POST login status:200
 
 POST login senha invalida status:422
 	[Tags]   User     Falha     /login
-	POST    ${url_${ambiente}}/user/logim  {"email": "admin@mail.com", "password": "lalala"}     timeout=20
+	POST    ${url_${ambiente}}/user/login  {"email": "admin@mail.com", "password": "lalala"}     timeout=20
+	Output Schema     response body
 	Integer    response status    422
 	String    response body msg   Senha inválida
 
 GET login status:404
 	[Tags]   User   Falha    /login
 	GET    ${url_${ambiente}}/user/login   {"email": "teste123", "password": "lalala"}    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PUT login status:404
 	[Tags]   User   Falha    /login
 	PUT    ${url_${ambiente}}/user/login   {"email": "teste123", "password": "lalala"}    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PATCH login status:404
 	[Tags]   User   Falha    /login
 	PATCH    ${url_${ambiente}}/user/logim   {"email": "teste123", "password": "lalala"}   timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 DELETE login status:404
 	[Tags]    User   Falha  /login
 	DELETE    ${url_${ambiente}}/user/login   {"email": "teste123", "password": "lalala"}    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 POST login admin status:200
 	[Tags]   User     Sucesso     /loginAdmin
-	Set Log Level    NONE
+	Builtin.Set Log Level    NONE
 	${json}  Load JSON from file    ${EXECDIR}/test/resources/userAdmin.json
-	Set Log Level    INFO
+	Builtin.Set Log Level    INFO
 	POST    ${url_${ambiente}}/user/loginAdmin   ${json}     timeout=20
+	Output Schema     response body
 	Integer    response status    200
 	String    response body msg   Autenticação realizada com sucesso!
 	${token_adm}   Output   response body token
@@ -372,36 +427,42 @@ POST login admin status:200
 POST login admin senha invalida status:422
 	[Tags]   User     Falha     /loginAdmin
 	POST    ${url_${ambiente}}/user/loginAdmin   {"email": "admin@mail.com", "password": "lalala"}     timeout=20
+	Output Schema     response body
 	Integer    response status    422
 	String    response body msg   Usuário ou senha inválidos
 
 POST login admin email invalido status:404
 	[Tags]   User     Falha     /loginAdmin
 	POST    ${url_${ambiente}}/user/loginAdmin   {"email": "admi123n@mail.com", "password": "lalala"}     timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String    response body msg   Usuário não encontrado!
 
 GET login admin status:404
 	[Tags]   User   Falha    /loginAdmin
 	GET    ${url_${ambiente}}/user/loginAdmin   {"email": "teste123", "password": "lalala"}    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PUT login admin status:404
 	[Tags]   User   Falha    /loginAdmin
 	PUT    ${url_${ambiente}}/user/loginAdmin   {"email": "teste123", "password": "lalala"}    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PATCH login admin status:404
 	[Tags]   User   Falha    /loginAdmin
 	PATCH    ${url_${ambiente}}/user/loginAdmin   {"email": "teste123", "password": "lalala"}   timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 DELETE login admin status:404
 	[Tags]    User   Falha  /loginAdmin
 	DELETE    ${url_${ambiente}}/user/loginAdmin   {"email": "teste123", "password": "lalala"}    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
@@ -409,6 +470,7 @@ POST auth admin status:200
 	[Tags]   User     Sucesso     /auth
 	Set Headers    { "authorization": "${token_adm}"}
 	POST    ${url_${ambiente}}/user/auth    timeout=20
+	Output Schema     response body
 	Integer    response status    200
 	String    response body msg   O Token é valido!
 
@@ -416,68 +478,206 @@ POST auth status:200
 	[Tags]   User     Sucesso     /auth
 	Set Headers    { "authorization": "${token_usr}"}
 	POST    ${url_${ambiente}}/user/auth    timeout=20
+	Output Schema     response body
 	Integer    response status    200
 	String    response body msg   O Token é valido!
 
-POST auth token invalido status:200
+POST auth token invalido status:400
 	[Tags]   User     Falha     /auth
 	Set Headers    { "authorization": "123123"}
 	POST    ${url_${ambiente}}/user/auth    timeout=20
+	Output Schema     response body
 	Integer    response status    400
 	String    response body msg   O Token é inválido!
 
-GET login admin status:404
+GET auth status:404
 	[Tags]   User   Falha    /auth
 	Set Headers    { "authorization": "123123"}
 	GET    ${url_${ambiente}}/user/auth     timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
-PUT login admin status:404
+PUT auth status:404
 	[Tags]   User   Falha    /auth
 	PUT    ${url_${ambiente}}/user/auth      timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
-PATCH login admin status:404
+PATCH auth status:404
 	[Tags]   User   Falha    /auth
 	PATCH    ${url_${ambiente}}/user/auth     timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
-DELETE login admin status:404
+DELETE auth status:404
 	[Tags]    User   Falha  /auth
 	DELETE    ${url_${ambiente}}/user/auth     timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 GET todos usuários status:200
 	[Tags]   User   Sucesso    /userAll
 	GET    ${url_${ambiente}}/user/userAll    timeout=20
+	Output Schema     response body
 	Integer    response status    200
 	Integer    response body Quantidade
 
 POST todos usuários status:404
 	[Tags]   User   Falha    /userAll
 	POST    ${url_${ambiente}}/user/userAll    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 
 PUT todos usuários status:404
-	[Tags]   User   Falha    /medicos-disponiveis
+	[Tags]   User   Falha    /userAll
 	PUT    ${url_${ambiente}}/user/userAll    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 PATCH todos usuários status:404
-	[Tags]   User   Falha    /medicos-disponiveis
+	[Tags]   User   Falha    /userAll
 	PATCH    ${url_${ambiente}}/user/userAll    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
 DELETE todos usuários status:404
-	[Tags]   User   Falha    /medicos-disponiveis
+	[Tags]   User   Falha    /userAll
 	DELETE    ${url_${ambiente}}/user/userAll    timeout=20
+	Output Schema     response body
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
+
+GET usuário id status:200
+	[Tags]   User   Sucesso    /user-id
+	GET    ${url_${ambiente}}/user/user-id-${id_user_criado}    timeout=20
+	Output Schema     response body
+	Integer    response status    200
+	String    response body Dados ID      ${id_user_criado}
+
+POST usuário id status:404
+	[Tags]   User   Falha    /user-id
+	POST    ${url_${ambiente}}/user/user-id-${id_user_criado}    timeout=20
+	Output Schema     response body
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+PUT usuário id status:404
+	[Tags]   User   Falha    /user-id
+	PUT    ${url_${ambiente}}/user/user-id-${id_user_criado}    timeout=20
+	Output Schema     response body
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+PATCH usuário id status:404
+	[Tags]   User   Falha    /user-id
+	PATCH    ${url_${ambiente}}/user/user-id-${id_user_criado}    timeout=20
+	Output Schema     response body
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+DELETE usuário id status:404
+	[Tags]   User   Falha    /user-id
+	DELETE    ${url_${ambiente}}/user/user-id-${id_user_criado}    timeout=20
+	Output Schema     response body
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+POST atualiza usuário status:200
+	[Tags]   User     Sucesso     /atualiza-user-id
+	${json}  Load JSON from file    ${EXECDIR}/test/resources/userEditado.json
+	POST    ${url_${ambiente}}/user/atualiza-user-id-${id_user_criado}   ${json}     timeout=20
+	Output Schema     response body
+	Integer    response status    200
+	String    response body message   Usuário atualizado com sucesso
+	String    response body ID        ${id_user_criado}
+	String    response body nome   usuario teste editado
+
+POST atualiza usuário id invalido status:400
+	[Tags]   User     Falha     /atualiza-user-id
+	${json}  Load JSON from file    ${EXECDIR}/test/resources/userEditado.json
+	POST    ${url_${ambiente}}/user/atualiza-user-id-123123bc   ${json}     timeout=20
+	Output Schema     response body
+	Integer    response status    400
+	String    response body message  ID invalido
+
+GET atualiza usuário id status:404
+	[Tags]   User   Falha    /atualiza-user-id
+	Set Headers    { "authorization": "123123"}
+	GET    ${url_${ambiente}}/user/atualiza-user-id-123123bc     timeout=20
+	Output Schema     response body
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+PUT atualiza usuário id status:404
+	[Tags]   User   Falha    /atualiza-user-id
+	PUT    ${url_${ambiente}}/user/atualiza-user-id-123123bc      timeout=20
+	Output Schema     response body
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+PATCH atualiza usuário id status:404
+	[Tags]   User   Falha    /atualiza-user-id
+	PATCH    ${url_${ambiente}}/user/atualiza-user-id-123123bc     timeout=20
+	Output Schema     response body
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+DELETE atualiza usuário id status:404
+	[Tags]    User   Falha  /atualiza-user-id
+	DELETE    ${url_${ambiente}}/user/atualiza-user-id-123123bc     timeout=20
+	Output Schema     response body
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+DELETE exclui usuário id status:200
+	[Tags]   User     Sucesso     /exclui-user-id
+	DELETE    ${url_${ambiente}}/user/exclui-user-id-${id_user_criado}      timeout=20
+	Output Schema     response body
+	Integer    response status    200
+	String    response body message   Usuário excluído com sucesso
+	String    response body ID        ${id_user_criado}
+
+DELETE exclui usuário id invalido status:400
+	[Tags]   User     Sucesso     /exclui-user-id
+	DELETE    ${url_${ambiente}}/user/exclui-user-id-123123bc      timeout=20
+	Output Schema     response body
+	Integer    response status    400
+	String    response body message  ID invalido
+
+GET exclui usuário id status:404
+	[Tags]   User   Falha    /exclui-user-id
+	GET    ${url_${ambiente}}/user/exclui-user-id-123123bc     timeout=20
+	Output Schema     response body
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+PUT exclui usuário id status:404
+	[Tags]   User   Falha    /exclui-user-id
+	PUT    ${url_${ambiente}}/user/exclui-user-id-123123bc      timeout=20
+	Output Schema     response body
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+PATCH exclui usuário id status:404
+	[Tags]   User   Falha    /exclui-user-id
+	PATCH    ${url_${ambiente}}/user/exclui-user-id-123123bc     timeout=20
+	Output Schema     response body
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+POST exclui usuário id status:404
+	[Tags]    User   Falha  /exclui-user-id
+	POST    ${url_${ambiente}}/user/exclui-user-id-123123bc     timeout=20
+	Output Schema     response body
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+############ AGENDA ################

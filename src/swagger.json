@@ -15,6 +15,10 @@
     {
       "name": "User",
       "description": "Endpoints relacionados as funcionalidades de usuários"
+    },
+    {
+      "name": "Agenda",
+      "description": "Endpoints relacionados as funcionalidades de agendamento"
     }
   ],
   "consumes": [
@@ -276,6 +280,14 @@
             "required": true,
             "schema": {
             }
+          },
+          {
+            "name": "dependentes",
+            "in": "body",
+            "description": "Informações de dependentes do usuário",
+            "schema": {
+              "$ref" : "#/definitions/dependentes_inner"
+            }
           }
         ],
         "responses": {
@@ -477,6 +489,14 @@
             "in": "body",
             "description": "Data de nascimento do usuário",
             "schema": {
+            }
+          },
+          {
+            "name": "dependentes",
+            "in": "body",
+            "description": "Informações de dependentes do usuário",
+            "schema": {
+              "$ref" : "#/definitions/dependentes_inner"
             }
           }
         ],
