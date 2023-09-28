@@ -274,6 +274,90 @@ PATCH exclui medico id status:404
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
+POST add User status:200
+	[Tags]   User     Sucesso     /addUser
+	Gera Email aleatorio
+	${json}  Load JSON from file    ${EXECDIR}/test/resources/user.json
+	Update value to JSON    ${json}    email    ${email}
+	POST    ${url_${ambiente}}/user/addUser   ${json}     timeout=20
+	Integer    response status    200
+	String    response body user email   ${email}
+	${id_user_criado}  Output      response body user _id
+	Set Global Variable    ${id_user_criado}
+
+POST add User nome vazio status:400
+	[Tags]   User     Falha     /addUser
+	Gera Email aleatorio
+	${json}  Load JSON from file    ${EXECDIR}/test/resources/user.json
+	Update value to JSON    ${json}    nome    ${EMPTY}
+	POST    ${url_${ambiente}}/user/addUser   ${json}     timeout=20
+	Integer    response status    400
+	String    response body error errors nome message   Nome é obrigatório
+
+GET add User status:404
+	[Tags]   User   Falha    /addUser
+	GET    ${url_${ambiente}}/user/addUser   {"email": "teste123", "password": "lalala"}    timeout=20
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+PUT add User status:404
+	[Tags]   User   Falha    /addUser
+	PUT    ${url_${ambiente}}/user/addUser   {"email": "teste123", "password": "lalala"}    timeout=20
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+PATCH add User status:404
+	[Tags]   User   Falha    /addUser
+	PATCH    ${url_${ambiente}}/user/addUser   {"email": "teste123", "password": "lalala"}   timeout=20
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+DELETE add User status:404
+	[Tags]    User   Falha  /addUser
+	DELETE    ${url_${ambiente}}/user/addUser   {"email": "teste123", "password": "lalala"}    timeout=20
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+POST login status:200
+	[Tags]   User     Sucesso     /login
+	${json}  Load JSON from file    ${EXECDIR}/test/resources/user.json
+	Update value to JSON    ${json}    email    ${email}
+	POST    ${url_${ambiente}}/user/login   ${json}     timeout=20
+	Integer    response status    200
+	String    response body msg   Autenticação realizada com sucesso!
+	${token_usr}   Output   response body token
+	Set Global Variable    ${token_usr}
+
+POST login senha invalida status:422
+	[Tags]   User     Falha     /login
+	POST    ${url_${ambiente}}/user/logim  {"email": "admin@mail.com", "password": "lalala"}     timeout=20
+	Integer    response status    422
+	String    response body msg   Senha inválida
+
+GET login status:404
+	[Tags]   User   Falha    /login
+	GET    ${url_${ambiente}}/user/login   {"email": "teste123", "password": "lalala"}    timeout=20
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+PUT login status:404
+	[Tags]   User   Falha    /login
+	PUT    ${url_${ambiente}}/user/login   {"email": "teste123", "password": "lalala"}    timeout=20
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+PATCH login status:404
+	[Tags]   User   Falha    /login
+	PATCH    ${url_${ambiente}}/user/logim   {"email": "teste123", "password": "lalala"}   timeout=20
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+DELETE login status:404
+	[Tags]    User   Falha  /login
+	DELETE    ${url_${ambiente}}/user/login   {"email": "teste123", "password": "lalala"}    timeout=20
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
 POST login admin status:200
 	[Tags]   User     Sucesso     /loginAdmin
 	Set Log Level    NONE
@@ -321,53 +405,16 @@ DELETE login admin status:404
 	Integer    response status    404
 	String     response body message  Caminho não encontrado!
 
-POST add User status:200
-	[Tags]   User     Sucesso     /addUser
-	Gera Email aleatorio
-	${json}  Load JSON from file    ${EXECDIR}/test/resources/user.json
-	Update value to JSON    ${json}    email    ${email}
-	POST    ${url_${ambiente}}/user/addUser   ${json}     timeout=20
-	Integer    response status    200
-	String    response body user email   ${email}
-	${id_user_criado}  Output      response body user _id
-	Set Global Variable    ${id_user_criado}
-
-POST add User nome vazio status:400
-	[Tags]   User     Falha     /addUser
-	Gera Email aleatorio
-	${json}  Load JSON from file    ${EXECDIR}/test/resources/user.json
-	Update value to JSON    ${json}    nome    ${EMPTY}
-	POST    ${url_${ambiente}}/user/addUser   ${json}     timeout=20
-	Integer    response status    400
-	String    response body error errors nome message   Nome é obrigatório
-
-GET add User status:404
-	[Tags]   User   Falha    /addUser
-	GET    ${url_${ambiente}}/user/addUser   {"email": "teste123", "password": "lalala"}    timeout=20
-	Integer    response status    404
-	String     response body message  Caminho não encontrado!
-
-PUT add User status:404
-	[Tags]   User   Falha    /addUser
-	PUT    ${url_${ambiente}}/user/addUser   {"email": "teste123", "password": "lalala"}    timeout=20
-	Integer    response status    404
-	String     response body message  Caminho não encontrado!
-
-PATCH add User status:404
-	[Tags]   User   Falha    /addUser
-	PATCH    ${url_${ambiente}}/user/addUser   {"email": "teste123", "password": "lalala"}   timeout=20
-	Integer    response status    404
-	String     response body message  Caminho não encontrado!
-
-DELETE add User status:404
-	[Tags]    User   Falha  /addUser
-	DELETE    ${url_${ambiente}}/user/addUser   {"email": "teste123", "password": "lalala"}    timeout=20
-	Integer    response status    404
-	String     response body message  Caminho não encontrado!
-
 POST auth admin status:200
 	[Tags]   User     Sucesso     /auth
 	Set Headers    { "authorization": "${token_adm}"}
+	POST    ${url_${ambiente}}/user/auth    timeout=20
+	Integer    response status    200
+	String    response body msg   O Token é valido!
+
+POST auth status:200
+	[Tags]   User     Sucesso     /auth
+	Set Headers    { "authorization": "${token_usr}"}
 	POST    ${url_${ambiente}}/user/auth    timeout=20
 	Integer    response status    200
 	String    response body msg   O Token é valido!
@@ -379,3 +426,58 @@ POST auth token invalido status:200
 	Integer    response status    400
 	String    response body msg   O Token é inválido!
 
+GET login admin status:404
+	[Tags]   User   Falha    /auth
+	Set Headers    { "authorization": "123123"}
+	GET    ${url_${ambiente}}/user/auth     timeout=20
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+PUT login admin status:404
+	[Tags]   User   Falha    /auth
+	PUT    ${url_${ambiente}}/user/auth      timeout=20
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+PATCH login admin status:404
+	[Tags]   User   Falha    /auth
+	PATCH    ${url_${ambiente}}/user/auth     timeout=20
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+DELETE login admin status:404
+	[Tags]    User   Falha  /auth
+	DELETE    ${url_${ambiente}}/user/auth     timeout=20
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+GET todos usuários status:200
+	[Tags]   User   Sucesso    /userAll
+	GET    ${url_${ambiente}}/user/userAll    timeout=20
+	Integer    response status    200
+	Integer    response body Quantidade
+
+POST todos usuários status:404
+	[Tags]   User   Falha    /userAll
+	POST    ${url_${ambiente}}/user/userAll    timeout=20
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+
+PUT todos usuários status:404
+	[Tags]   User   Falha    /medicos-disponiveis
+	PUT    ${url_${ambiente}}/user/userAll    timeout=20
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+PATCH todos usuários status:404
+	[Tags]   User   Falha    /medicos-disponiveis
+	PATCH    ${url_${ambiente}}/user/userAll    timeout=20
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
+
+DELETE todos usuários status:404
+	[Tags]   User   Falha    /medicos-disponiveis
+	DELETE    ${url_${ambiente}}/user/userAll    timeout=20
+	Integer    response status    404
+	String     response body message  Caminho não encontrado!
