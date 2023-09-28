@@ -268,6 +268,14 @@
             "required": true,
             "schema": {
             }
+          },
+          {
+            "name": "dataNascimento",
+            "in": "body",
+            "description": "Data de nascimento do usuário",
+            "required": true,
+            "schema": {
+            }
           }
         ],
         "responses": {
@@ -410,6 +418,81 @@
         }
       }
     },
+    "/user/userAll": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Traz todos os usuários",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/user/atualiza-user-id-{id}": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Atualiza o usuário com o ID especificado",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "nome",
+            "in": "body",
+            "description": "Nome do usuário",
+            "schema": {}
+          },
+          {
+            "name": "email",
+            "in": "body",
+            "description": "Email do usuário",
+            "schema": {}
+            },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "Senha do usuário",
+            "schema": {
+            }
+          },
+          {
+            "name": "dataNascimento",
+            "in": "body",
+            "description": "Data de nascimento do usuário",
+            "schema": {
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
     "/user/exclui-user-id-{id}": {
       "delete": {
         "tags": [
@@ -437,6 +520,150 @@
           }
         }
       }
+    },
+    "/agenda/addAgenda": {
+      "post": {
+        "tags": [
+          "Agenda"
+        ],
+        "description": "Adiciona agenda de consulta",
+        "parameters": [
+          {
+            "name": "medicoId",
+            "in": "body",
+            "description": "Id do médico",
+            "schema": {}
+          },
+          {
+            "name": "pacienteId",
+            "in": "body",
+            "description": "Id do usuário",
+            "schema": {}
+          },
+          {
+            "name": "dataConsulta",
+            "in": "body",
+            "description": "Data da consulta no formato YYYY-MM-DD",
+            "schema": {
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/agenda/getAgendaByMedicoId/{id}": {
+      "get": {
+        "tags": [
+          "Agenda"
+        ],
+        "description": "Traz agenda de consultas do médico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do médico",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Não encontrado"
+          }
+        }
+      }
+    },
+    "/agenda/getAgendaByPacienteId/{id}": {
+      "get": {
+        "tags": [
+          "Agenda"
+        ],
+        "description": "Traz agenda de consultas do paciente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do paciente",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Não encontrado"
+          }
+        }
+      }
+    },
+    "/agenda/editByIdAgendamento/{id}": {
+      "post": {
+        "tags": [
+          "Agenda"
+        ],
+        "description": "Muda data de agenda de consulta",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do paciente",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "dataConsulta",
+            "in": "body",
+            "description": "Data da consulta no formato YYYY-MM-DD",
+            "schema": {
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Não encontrado"
+          }
+        }
+      }
+    },
+    "/agenda/cancelaByAgendamentoId/{id}": {
+      "delete": {
+        "tags": [
+          "Agenda"
+        ],
+        "description": "Deleta agenda de consulta",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do agendamento",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Não encontrado"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -445,7 +672,7 @@
       "properties": {
         "nome": {
           "type": "string",
-          "example": "Cristiano Alves de Lima"
+          "example": "Medico teste de Lima"
         },
         "especialidade": {
           "type": "string",
@@ -458,7 +685,7 @@
         },
         "email": {
           "type": "string",
-          "example": "cristianoal@gmail.com"
+          "example": "medicoteste123@gmail.com"
         },
         "foto": {
           "type": "string",
@@ -492,12 +719,30 @@
         },
         "dependentes": {
           "type": "array",
-          "example": "CONSERTAR QUANDO TERMINAR OS DEPENDENTES",
-          "description": "NAO ESQUECER DE CONSERTAR"
+          "items": {
+            "$ref" : "#/definitions/dependentes_inner"
+          }
         }
       },
       "xml": {
         "name": "User"
+      }
+    },
+    "dependentes_inner": {
+      "properties" : {
+        "nome" : {
+          "type" : "string",
+          "description" : "Nome do dependente"
+        },
+        "email" : {
+          "type" : "string",
+          "description" : "Email do dependente"
+        },
+        "dataNascimento" : {
+          "type" : "string",
+          "description" : "Data de nascimento do dependente. Formato da data: YYYY-MM-DD",
+          "example": "2010-02-11"
+        }
       }
     },
     "Agenda": {
