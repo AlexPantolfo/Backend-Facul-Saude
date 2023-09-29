@@ -18,6 +18,10 @@ const routes = (server: express.Application): void => {
     server.use('/api-docs', swaggerUi.serve);
     server.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
+    server.get('/test-log', (req: Request, res: Response) => {
+        res.sendFile('/log/log.html', { root: './test' })
+    });
+
     server.use(errorHandler)
 
     server.use((req, res, next) => {
