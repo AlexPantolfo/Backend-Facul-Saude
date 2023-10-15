@@ -18,7 +18,6 @@ export default class MedicosController {
     protected registerRoutes(): void {
         this.router.get('/medicos-disponiveis', async (req, res, next) => {
             try {
-                /* const {  page = 1, limit = 10 } = req.query; */
                 const [medicos, count] = await Promise.all([
                     Medicos.find({ isDeleted: false }),
                     Medicos.count({ isDeleted: false }),
