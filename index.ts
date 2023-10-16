@@ -19,19 +19,7 @@ class Server {
     public config(): void {
         this.app.set('port', 3000);
         this.app.use(express.json());
-        this.app.use(cors({
-            origin: function (origin, callback) {
-                if (!origin) return callback(null, true);
-
-                const allowedDomains = ['http://127.0.0.1:5500', "https://icei-puc-minas-pmv-si.github.io/"];
-
-                if (allowedDomains.indexOf(origin) === -1) {
-                    var msg = `This site ${origin} does not have an access. Only specific domains are allowed to access it.`;
-                    return callback(new Error(msg), false);
-                }
-                return callback(null, true);
-            }, credentials: true
-        }))
+        this.app.use(cors())
 
         routes(this.app);
     }
