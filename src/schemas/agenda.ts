@@ -6,9 +6,17 @@ const AgendaSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         require: [true, "Campo medicoId é obrigatório"]
     },
+    medicoNome: {
+        type: String,
+        require: false
+    },
     pacienteId: {
         type: Schema.Types.ObjectId,
         require: [true, "Campo pacienteId é obrigatório"],
+    },
+    pacienteNome: {
+        type: String,
+        require: false
     },
     dataConsulta: {
         type: String,

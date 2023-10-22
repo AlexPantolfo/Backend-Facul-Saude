@@ -69,7 +69,8 @@ export default class MedicosController {
                     especialidade: req.body.especialidade,
                     CRM: req.body.CRM,
                     email: req.body.email,
-                    foto: req.body.foto
+                    foto: req.body.foto,
+                    descricao: req.body.descricao
                 });
                 res.json(this.medicosDTO.getCreateMedicoResponseDTO(medico));
             } catch (error) {
@@ -80,12 +81,13 @@ export default class MedicosController {
         this.router.post('/atualiza-medico-id-:id', validateObjectId, async (req, res, next) => {
             try {
                 const toUpdate: any = {};
-                const { nome, especialidade, CRM, email, foto } = req.body;
+                const { nome, especialidade, CRM, email, foto, descricao } = req.body;
                 if (nome) toUpdate.nome = nome;
                 if (especialidade) toUpdate.especialidade = especialidade;
                 if (CRM) toUpdate.CRM = CRM;
                 if (email) toUpdate.email = email;
                 if (foto) toUpdate.foto = foto;
+                if (descricao) toUpdate.descricao = descricao;
                 const updated = await Medicos.findOneAndUpdate(
                     { _id: req.params.id, isDeleted: false },
                     toUpdate,

@@ -10,6 +10,7 @@ export default class MedicosDTO {
     CRM: medico.CRM,
     email: medico.email,
     foto: medico.foto,
+    descricao: medico.descricao
   });
 
   public getMedicoResponseDTO = (medicos, count) => ({
@@ -45,5 +46,6 @@ export default class MedicosDTO {
     CRM: medico.CRM,
     email: medico.email,
     foto: medico.foto,
+    descricao: medico.descricao
   });
 }
