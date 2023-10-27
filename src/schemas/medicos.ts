@@ -28,7 +28,7 @@ const MedicosSchema = new mongoose.Schema(
 		},
 		foto:
 		{
-			type: File,
+			type: String,
 			required: [true, "Foto é obrigatória"],
 		},
 		descricao:
